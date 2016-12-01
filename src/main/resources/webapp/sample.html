@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml" lang="en">
+<head th:replace="webapp/layout.html::head">
+</head>
+<body>
+
+<div id="map"></div>
+<script>
+      function initMap() {
+        var clare = {lat: 52.7744853, lng: -9.1919091};
+        var bearing=45.0;
+        var length=1000;
+        var samples=10;
+        var markers=0;
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 12,
+          center: clare
+        });
+        var url="/api/v1/elevation/grid?latitude=52.7744853&longitude=-9.1919091&bearing=45&length=1000&samples=10";
+        $.getJSON(url,function(json){
+
+
+                for(var i=0;i<samples;i++){
+
+                var row=json[i];
+
+                console.log(row);
+
+                for(var j=0;j<samples;j++){
+
+                    var coord=row[j];
+
+                    var pos={lat:coord.latitude,lng:coord.longitude};
+                   var marker = new google.maps.Marker({
+                          position: pos,
+                          map: map
+                        });
+
+markers++;
+
+                    }
+                }
+alert(markers);
+            });
+
+
+
+      }
+
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDNVbDjNtRDD8g_WvTKxH7oNPi0S-g15wQ&callback=initMap">
+</script>
+
+<div th:replace="webapp/layout.html::scripts">
+</div>
+</body>
+</html>
